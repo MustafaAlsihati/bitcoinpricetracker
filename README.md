@@ -5,6 +5,8 @@ Application that tracks Bitcoin price in USD, work as a small widget that only s
 ![Screen shot 1](https://raw.githubusercontent.com/MustafaAlsihati/bitcoinpricetracker/master/ss1.png)
 
 
+
+
 # Changes
 
 • Price color changes as the price increase or decrease.
