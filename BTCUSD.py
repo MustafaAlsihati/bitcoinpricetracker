@@ -4,8 +4,8 @@ import json
 
 lastClickX = 0
 lastClickY = 0
-selected = False
-
+isAlwaysOnTop = False
+isRevertColors = False
 root = Tk()
 
 def getPriceFromUrl():
@@ -17,19 +17,20 @@ def Refresher():
     # Change color based on the value:
     changeBgColor(getPriceFromUrl())
     # every 2 seconds
-    root.after(2000, Refresher)
+    root.after(1000, Refresher)
 
 maxVal = float(getPriceFromUrl())
 
 def changeBgColor(value):
     global maxVal
+    global isRevertColors
     if maxVal < float(value):
         maxVal = float(value)
-        price.config(fg="green")
+        price.config(fg="white", bg="green") if isRevertColors else price.config(bg="black", fg="green")
     elif maxVal > float(value):
-        price.config(fg="red")
+        price.config(fg="white", bg="red") if isRevertColors else price.config(bg="black", fg="red")
     else:
-        price.config(fg="white")
+        price.config(bg="black", fg="white")
 
 def SaveLastClickPos(event):
     global lastClickX, lastClickY
@@ -51,13 +52,20 @@ def closeApp():
     sys.exit()
 
 def alwaysOnTop():
-    global selected
-    if selected is False:
+    global isAlwaysOnTop
+    if isAlwaysOnTop is False:
         root.attributes('-topmost', True)
-        selected = True
+        isAlwaysOnTop = True
     else:
         root.attributes('-topmost', False)
-        selected = False
+        isAlwaysOnTop = False
+
+def revertColors():
+    global isRevertColors
+    if isRevertColors is False:
+        isRevertColors = True
+    else:
+        isRevertColors = False
 
 # Elements Initialize:
 menu = Menu(root, tearoff=0)
@@ -65,6 +73,7 @@ price = Label(root, bg="black", fg="white")
 price.config(font=("Lucida Grande", 16))
 colorMenu = Menu(menu)
 menu.add_checkbutton(label="Always On Top", command=alwaysOnTop)
+menu.add_checkbutton(label="Revert Colors", command=revertColors)
 menu.add_command(label="Exit", command=closeApp)
 
 # Root Settings:
